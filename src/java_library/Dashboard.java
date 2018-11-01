@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -195,14 +196,29 @@ public class Dashboard extends javax.swing.JFrame {
         btnBk2Reserve.setText("Reserve");
 
         btnBk1List.setText("jButton5");
+        btnBk1List.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBk1ListActionPerformed(evt);
+            }
+        });
 
         btnBk2List.setText("jButton5");
+        btnBk2List.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBk2ListActionPerformed(evt);
+            }
+        });
 
         btnBook1Return.setText("Return");
 
         btnBk2Return.setText("Return");
 
         btnBkSearch.setText("Search by Member");
+        btnBkSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBkSearchActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlOpsLayout = new javax.swing.GroupLayout(pnlOps);
         pnlOps.setLayout(pnlOpsLayout);
@@ -747,8 +763,10 @@ public class Dashboard extends javax.swing.JFrame {
     private void btnMemRegActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMemRegActionPerformed
         if(library.insertMember(txtMemFname.getText().toString(), txtMemLname.getText().toString(), txtMemAddress.getText().toString(), Integer.parseInt(txtMemTel.getText().toString())) == 1){
             System.out.println("It's a success");
+            JOptionPane.showMessageDialog(null, "Member Registered");
         }else{
             System.out.println("It's been failed:(");
+            JOptionPane.showMessageDialog(null, "Member registration failed");
         }
     }//GEN-LAST:event_btnMemRegActionPerformed
 
@@ -771,7 +789,7 @@ public class Dashboard extends javax.swing.JFrame {
             values.add(txtMemLname.getText().toString());
         }
         
-        result = library.searchRecords("members","mem_id",key, columns, values);
+        result = library.searchRecords("members","mem_id",key, columns, values,"");
         ResultSetMetaData rsmd;
         int columnsNumber;
         try {
@@ -789,8 +807,10 @@ public class Dashboard extends javax.swing.JFrame {
     private void btnAuthAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAuthAddActionPerformed
         if(library.insertAuthor(txtAuthName.getText().toString()) == 1){
             System.out.println("Insertion Success");
+            JOptionPane.showMessageDialog(null, "Author Registered");
         }else{
             System.out.println("Insertion failed");
+            JOptionPane.showMessageDialog(null, "Author Registration failed");
         }
     }//GEN-LAST:event_btnAuthAddActionPerformed
 
@@ -807,7 +827,7 @@ public class Dashboard extends javax.swing.JFrame {
             values.add(txtAuthName.getText().toString());
         }
         
-        result = library.searchRecords("author","auth_id",key, columns, values);
+        result = library.searchRecords("author","auth_id",key, columns, values,"");
         ResultsetHolder.setResults(result,"Auth");
         ModalDialog resDialog = new ModalDialog(this, true);
         resDialog.setVisible(true);
@@ -818,8 +838,10 @@ public class Dashboard extends javax.swing.JFrame {
         int auth = tryParse(txtRegBkAuthor.getText().toString());
         if(library.insertBook(txtRegBkName.getText().toString(), txtRegBkDescription.getText().toString(), auth) == 1){
             System.out.println("Book Added");
+            JOptionPane.showMessageDialog(null, "Book Registered");
         }else{
             System.out.println("Book add failed");
+            JOptionPane.showMessageDialog(null, "Registration failed");
         }
     }//GEN-LAST:event_btnRegBkRegActionPerformed
 
@@ -842,11 +864,48 @@ public class Dashboard extends javax.swing.JFrame {
             values.add(txtRegBkAuthor.getText().toString());
         }
         
-        result = library.searchRecords("books","bk_id",key, columns, values);
+        result = library.searchRecords("books","bk_id",key, columns, values,"");
         ResultsetHolder.setResults(result,"Book");
         ModalDialog resDialog = new ModalDialog(this, true);
         resDialog.setVisible(true);
     }//GEN-LAST:event_btnRegBkSearchActionPerformed
+
+    private void btnBkSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBkSearchActionPerformed
+        int key = 0;
+        List<String> columns = new ArrayList<>();
+        List<String> values = new ArrayList<>();
+        ResultSet result;
+        if(txtBkMemID.getText().toString()!=""){
+            key = tryParse(txtBkMemID.getText().toString());
+        }
+        
+        result = library.searchRecords("members","mem_id",key, columns, values,"");
+        ResultsetHolder.setResults(result,"Ops_Mem");
+        ModalDialog resDialog = new ModalDialog(this, true);
+        resDialog.setVisible(true);
+    }//GEN-LAST:event_btnBkSearchActionPerformed
+
+    private void btnBk1ListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBk1ListActionPerformed
+        int key = 0;
+        List<String> columns = new ArrayList<>();
+        List<String> values = new ArrayList<>();
+        ResultSet result;
+        result = library.searchRecords("books","bk_id",key, columns, values,"");
+        ResultsetHolder.setResults(result,"Book1_List");
+        ModalDialog resDialog = new ModalDialog(this, true);
+        resDialog.setVisible(true);
+    }//GEN-LAST:event_btnBk1ListActionPerformed
+
+    private void btnBk2ListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBk2ListActionPerformed
+        int key = 0;
+        List<String> columns = new ArrayList<>();
+        List<String> values = new ArrayList<>();
+        ResultSet result;
+        result = library.searchRecords("books","bk_id",key, columns, values,"");
+        ResultsetHolder.setResults(result,"Book2_List");
+        ModalDialog resDialog = new ModalDialog(this, true);
+        resDialog.setVisible(true);
+    }//GEN-LAST:event_btnBk2ListActionPerformed
 
     private void activatePanels(int type){
         for(int i = 0;i<panels.length;i++){
@@ -868,6 +927,37 @@ public class Dashboard extends javax.swing.JFrame {
         return val;
     }
     
+    private void processExtra(String book_id, String mem_id,int step){
+        int key = 0;
+        List<String> columns = new ArrayList<>();
+        List<String> values = new ArrayList<>();
+        ResultSet result;
+        if(book_id!=""){
+            key = tryParse(book_id);
+        }
+        
+        if(key!=0){
+            result = library.searchRecords("books","bk_id",key, columns, values,"");
+            ResultsetHolder.setResults(result,"Ops_Bk_"+step);
+            setColumns();
+            
+            if(book_id!=""){
+                key = tryParse(book_id);
+            }
+            
+            if(key > 0){
+                columns.clear();
+                values.clear();
+                columns.add("trns_bk_id");
+                columns.add("trns_mem_id");
+                values.add(book_id);
+                values.add(mem_id);
+                result = library.searchRecords("transactions","trns_id",key, columns, values," ORDER BY trns_id DESC");
+                ResultsetHolder.setResults(result,"Trns_"+step);
+            }
+        }
+    }
+    
     public void setColumns(){
         List<String> records = ResultsetHolder.getRecord();
         switch(ResultsetHolder.modalType){
@@ -887,6 +977,34 @@ public class Dashboard extends javax.swing.JFrame {
                 txtRegBkName.setText(records.get(1));
                 txtRegBkDescription.setText(records.get(2));
                 txtRegBkAuthor.setText(records.get(3));
+                break;
+            case "Ops_Mem":
+                txtBkID1.setText(records.get(6));
+                txtBkID2.setText(records.get(7));
+                processExtra(txtBkID1.getText().toString(),txtBkMemID.getText().toString(),1);
+                processExtra(txtBkID2.getText().toString(),txtBkMemID.getText().toString(),2);
+                break;
+            case "Ops_Bk_1":
+                txtBkName1.setText(records.get(1));
+                break;
+            case "Ops_Bk_2":
+                txtBkName2.setText(records.get(1));
+                break;
+            case "Trns_1":
+                txtBk1Borrowed.setText(records.get(3));
+                txtBk1Returned.setText(records.get(4));
+                break;
+            case "Trns_2":
+                txtBk2Borrowed.setText(records.get(3));
+                txtBk2Returned.setText(records.get(4));
+                break;
+            case "Book1_List":
+                txtBkID1.setText(records.get(0));
+                txtBkName1.setText(records.get(1));
+                break;
+            case "Book2_List":
+                txtBkID2.setText(records.get(0));
+                txtBkName2.setText(records.get(1));
                 break;
             default:
                 break;
