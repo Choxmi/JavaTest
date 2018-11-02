@@ -99,7 +99,35 @@ public class LibraryDAO {
         return 0;
     }
     
-    public ResultSet searchRecords(String tbl, String keyCol, int key, List<String> columns, List<String> values){
+    public int insertTransaction(String bk_id, String mem_id, String trns_borrowed_date, String trns_returned_date, String status, int step){
+        query = "INSERT INTO transactions(trns_bk_id,trns_mem_id,trns_borrowed_date,trns_returned_date,	trns_status) VALUES (?,?,?,?,?)";
+        try {
+            ps = con.prepareStatement(query);
+            ps.setString(1, bk_id);
+            ps.setString(2, mem_id);
+            ps.setString(3, trns_borrowed_date);
+            ps.setString(4, trns_returned_date);
+            ps.setString(5, status);
+            
+            ps.execute();
+            
+            
+            query = "UPDATE members SET mem_book_"+step+" = ? WHERE mem_id = ?";
+            ps = con.prepareStatement(query);
+            ps.setString(1, bk_id);
+            ps.setString(2, mem_id);
+            ps.execute();
+            
+            return 1;
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(LibraryDAO.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
+        }
+        return 0;
+    }
+    
+    public ResultSet searchRecords(String tbl, String keyCol, int key, List<String> columns, List<String> values,String extra){
         try {
             query = "SELECT * FROM "+tbl+" WHERE 1 = 1 ";
             if(key!=0){
@@ -116,6 +144,7 @@ public class LibraryDAO {
                     }
                 }
             }
+            query = query+extra;
             System.out.println("Query : "+query);
             ps = con.prepareStatement(query);
             
