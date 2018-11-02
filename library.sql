@@ -1,15 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.0
--- https://www.phpmyadmin.net/
+-- version 4.5.4.1deb2ubuntu2.1
+-- http://www.phpmyadmin.net
 --
--- Host: 127.0.0.1
--- Generation Time: Nov 02, 2018 at 05:06 AM
--- Server version: 10.1.31-MariaDB
--- PHP Version: 7.2.4
+-- Host: localhost
+-- Generation Time: Nov 02, 2018 at 03:41 PM
+-- Server version: 5.7.24-0ubuntu0.16.04.1
+-- PHP Version: 7.0.32-0ubuntu0.16.04.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -39,7 +37,8 @@ CREATE TABLE `author` (
 
 INSERT INTO `author` (`auth_ID`, `auth_Name`) VALUES
 (1, 'Chox'),
-(2, 'hbjj');
+(2, 'hbjj'),
+(3, 'J.K. Rowling');
 
 -- --------------------------------------------------------
 
@@ -60,7 +59,8 @@ CREATE TABLE `books` (
 --
 
 INSERT INTO `books` (`bk_ID`, `bk_Name`, `bk_Description`, `bk_Author`, `bk_borrowed_user`) VALUES
-(1, 'Chocolate Company', 'Test', 0, 0);
+(1, 'Chocolate Company', 'Test', 0, 0),
+(2, 'Harry Potter', 'First one of Hp Series', 3, 0);
 
 -- --------------------------------------------------------
 
@@ -71,7 +71,6 @@ INSERT INTO `books` (`bk_ID`, `bk_Name`, `bk_Description`, `bk_Author`, `bk_borr
 CREATE TABLE `fine` (
   `fine_id` int(11) NOT NULL,
   `fine_trns_id` int(11) NOT NULL,
-  `fine_usr_id` int(11) NOT NULL,
   `fine_amount` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -97,7 +96,7 @@ CREATE TABLE `members` (
 --
 
 INSERT INTO `members` (`mem_id`, `mem_first_name`, `mem_last_name`, `mem_address`, `mem_telephone`, `mem_type`, `mem_book_1`, `mem_book_2`) VALUES
-(1, 'Choxmi', 'Sathsara', 'H/18,Punchimadawala,Kithulgala', 717753438, 0, 1, 0);
+(1, 'Choxmi', 'Sathsara', 'H/18,Punchimadawala,Kithulgala', 717753438, 0, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -119,8 +118,9 @@ CREATE TABLE `transactions` (
 --
 
 INSERT INTO `transactions` (`trns_id`, `trns_bk_id`, `trns_mem_id`, `trns_borrowed_date`, `trns_returned_date`, `trns_status`) VALUES
-(1, 1, 1, '2018-09-05', NULL, 'Borrow'),
-(2, 1, 1, '2018-05-09', NULL, 'Borrow');
+(2, 2, 1, '2018-09-10', '2018-11-02', 'Return'),
+(3, 2, 1, '2018-05-06', '2018-11-02', 'Return'),
+(4, 1, 1, '2018-05-01', NULL, 'Borrow');
 
 --
 -- Indexes for dumped tables
@@ -164,33 +164,27 @@ ALTER TABLE `transactions`
 -- AUTO_INCREMENT for table `author`
 --
 ALTER TABLE `author`
-  MODIFY `auth_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
+  MODIFY `auth_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `books`
 --
 ALTER TABLE `books`
-  MODIFY `bk_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
+  MODIFY `bk_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `fine`
 --
 ALTER TABLE `fine`
   MODIFY `fine_id` int(11) NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `members`
 --
 ALTER TABLE `members`
   MODIFY `mem_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
 --
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `trns_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-COMMIT;
-
+  MODIFY `trns_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -27,7 +27,7 @@ public class LibraryDAO {
     private LibraryDAO(){
         try{
             Class.forName("com.mysql.jdbc.Driver");  
-            con=(Connection) DriverManager.getConnection(connectionString,"root",""); 
+            con=(Connection) DriverManager.getConnection(connectionString,"choxmi","root"); 
             
             if(con!=null){
                 System.out.println("Connection succeeded");
@@ -127,6 +127,34 @@ public class LibraryDAO {
         return 0;
     }
     
+    public int updateTransaction(String status, String ret_date, String bk_id, String mem_id, int step){
+        query = "UPDATE transactions SET trns_status = ? , trns_returned_date = ? WHERE trns_bk_id = ? AND trns_mem_id = ?";
+        try {
+            ps = con.prepareStatement(query);
+            ps.setString(1, status);
+            ps.setString(2, ret_date);
+            ps.setString(3, bk_id);
+            ps.setString(4, mem_id);
+            System.out.println(query);
+            
+            ps.execute();
+            
+            if(status.equals("Return")){
+                query = "UPDATE members SET mem_book_"+step+" = ? WHERE mem_id = ?";
+                ps = con.prepareStatement(query);
+                ps.setInt(1, 0);
+                ps.setString(2, mem_id);
+                ps.execute();
+            }
+            return 1;
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(LibraryDAO.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
+        }
+        return 0;
+    }
+    
     public ResultSet searchRecords(String tbl, String keyCol, int key, List<String> columns, List<String> values,String extra){
         try {
             query = "SELECT * FROM "+tbl+" WHERE 1 = 1 ";
@@ -176,5 +204,4 @@ public class LibraryDAO {
         }
         return val;
     }
-    
 }

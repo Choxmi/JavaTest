@@ -136,11 +136,14 @@ public class ModalDialog extends javax.swing.JDialog {
         int row = tblDataTable.getSelectedRow();
         for(int column=0;column<columnsNumber;column++){
             String value = tblDataTable.getModel().getValueAt(row, column).toString();
-            System.out.println("Value : "+value);
             response.add(value);
         }
         ResultsetHolder.setRecord(response);
-        ((Dashboard)getOwner()).setColumns();
+        try {
+            ((Dashboard)getOwner()).setColumns();
+        } catch (SQLException ex) {
+            Logger.getLogger(ModalDialog.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.dispose();
     }//GEN-LAST:event_btnChooseRecordActionPerformed
 

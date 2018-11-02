@@ -8,6 +8,8 @@ package java_library;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -23,6 +25,7 @@ import javax.swing.JPanel;
 public class Dashboard extends javax.swing.JFrame {
     JPanel[] panels;
     LibraryDAO library;
+    List<String> records;
     /**
      * Creates new form Dashboard
      */
@@ -81,6 +84,10 @@ public class Dashboard extends javax.swing.JFrame {
         btnBook1Return = new javax.swing.JButton();
         btnBk2Return = new javax.swing.JButton();
         btnBkSearch = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
         pnlMember = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -179,6 +186,12 @@ public class Dashboard extends javax.swing.JFrame {
 
         jLabel15.setText("Returned");
 
+        txtBkMemID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBkMemIDActionPerformed(evt);
+            }
+        });
+
         jLabel16.setText("Borrowed");
 
         jLabel17.setText("Returned");
@@ -197,6 +210,11 @@ public class Dashboard extends javax.swing.JFrame {
         btnBk1Reserve.setText("Reserve");
 
         btnBk2Borrow.setText("Borrow");
+        btnBk2Borrow.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBk2BorrowActionPerformed(evt);
+            }
+        });
 
         btnBk2Reserve.setText("Reserve");
 
@@ -215,8 +233,18 @@ public class Dashboard extends javax.swing.JFrame {
         });
 
         btnBook1Return.setText("Return");
+        btnBook1Return.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBook1ReturnActionPerformed(evt);
+            }
+        });
 
         btnBk2Return.setText("Return");
+        btnBk2Return.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBk2ReturnActionPerformed(evt);
+            }
+        });
 
         btnBkSearch.setText("Search by Member");
         btnBkSearch.addActionListener(new java.awt.event.ActionListener() {
@@ -224,6 +252,14 @@ public class Dashboard extends javax.swing.JFrame {
                 btnBkSearchActionPerformed(evt);
             }
         });
+
+        jLabel6.setText("YY/MM/DD");
+
+        jLabel8.setText("YY/MM/DD");
+
+        jLabel24.setText("YY/MM/DD");
+
+        jLabel25.setText("YY/MM/DD");
 
         javax.swing.GroupLayout pnlOpsLayout = new javax.swing.GroupLayout(pnlOps);
         pnlOps.setLayout(pnlOpsLayout);
@@ -235,7 +271,7 @@ public class Dashboard extends javax.swing.JFrame {
                     .addComponent(jSeparator1)
                     .addGroup(pnlOpsLayout.createSequentialGroup()
                         .addGroup(pnlOpsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE)
                             .addGroup(pnlOpsLayout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -264,18 +300,22 @@ public class Dashboard extends javax.swing.JFrame {
                                         .addComponent(btnBk1Reserve)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(btnBook1Return))
-                                    .addGroup(pnlOpsLayout.createSequentialGroup()
-                                        .addComponent(jLabel15)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txtBk1Returned, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlOpsLayout.createSequentialGroup()
                                         .addComponent(jLabel9)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(txtBkName1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlOpsLayout.createSequentialGroup()
-                                        .addComponent(jLabel11)
+                                        .addGroup(pnlOpsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel11)
+                                            .addComponent(jLabel6))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(txtBk1Borrowed, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(txtBk1Borrowed, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(pnlOpsLayout.createSequentialGroup()
+                                        .addGroup(pnlOpsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel8)
+                                            .addComponent(jLabel15))
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtBk1Returned, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(18, 18, 18)
                                 .addGroup(pnlOpsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(pnlOpsLayout.createSequentialGroup()
@@ -290,13 +330,16 @@ public class Dashboard extends javax.swing.JFrame {
                                         .addComponent(btnBk2Return))
                                     .addGroup(pnlOpsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlOpsLayout.createSequentialGroup()
-                                            .addComponent(jLabel16)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(txtBk2Borrowed, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlOpsLayout.createSequentialGroup()
                                             .addComponent(jLabel17)
                                             .addGap(18, 18, 18)
-                                            .addComponent(txtBk2Returned, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                            .addComponent(txtBk2Returned, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlOpsLayout.createSequentialGroup()
+                                            .addGroup(pnlOpsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(jLabel24)
+                                                .addComponent(jLabel16))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(txtBk2Borrowed, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jLabel25))))
                         .addContainerGap())))
             .addGroup(pnlOpsLayout.createSequentialGroup()
                 .addGap(126, 126, 126)
@@ -344,13 +387,21 @@ public class Dashboard extends javax.swing.JFrame {
                     .addComponent(txtBk1Borrowed, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel16)
                     .addComponent(txtBk2Borrowed, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(31, 31, 31)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlOpsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel24))
+                .addGap(18, 18, 18)
                 .addGroup(pnlOpsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel15)
                     .addComponent(txtBk1Returned, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel17)
                     .addComponent(txtBk2Returned, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlOpsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel25))
+                .addGap(7, 7, 7)
                 .addGroup(pnlOpsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnBk1Borrow)
                     .addComponent(btnBk1Reserve)
@@ -358,7 +409,7 @@ public class Dashboard extends javax.swing.JFrame {
                     .addComponent(btnBk2Reserve)
                     .addComponent(btnBook1Return)
                     .addComponent(btnBk2Return))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnBkSearch)
@@ -421,7 +472,7 @@ public class Dashboard extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlMemberLayout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addGap(18, 18, 18)
-                                .addComponent(txtMemFname, javax.swing.GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE))
+                                .addComponent(txtMemFname, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlMemberLayout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addGap(18, 18, 18)
@@ -433,7 +484,7 @@ public class Dashboard extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addGroup(pnlMemberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtMemAddress)
-                                    .addComponent(txtMemLname, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE))))
+                                    .addComponent(txtMemLname, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE))))
                         .addGap(89, 89, 89))))
         );
         pnlMemberLayout.setVerticalGroup(
@@ -527,7 +578,7 @@ public class Dashboard extends javax.swing.JFrame {
                         .addComponent(btnRegBkSearch)
                         .addGap(18, 18, 18)
                         .addComponent(btnRegBkDel)))
-                .addContainerGap(149, Short.MAX_VALUE))
+                .addContainerGap(189, Short.MAX_VALUE))
         );
         pnlRegBookLayout.setVerticalGroup(
             pnlRegBookLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -554,7 +605,7 @@ public class Dashboard extends javax.swing.JFrame {
                     .addComponent(btnRegBkReg)
                     .addComponent(btnRegBkSearch)
                     .addComponent(btnRegBkDel))
-                .addContainerGap(95, Short.MAX_VALUE))
+                .addContainerGap(127, Short.MAX_VALUE))
         );
 
         tblAuthList.setModel(new javax.swing.table.DefaultTableModel(
@@ -624,7 +675,7 @@ public class Dashboard extends javax.swing.JFrame {
                         .addComponent(btnAuthSearch)
                         .addGap(18, 18, 18)
                         .addComponent(btnAuthAdd)))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(111, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlAuthorLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btnAuthReserve)
@@ -651,14 +702,14 @@ public class Dashboard extends javax.swing.JFrame {
                 .addGroup(pnlAuthorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAuthReserve)
                     .addComponent(btnAuthBorrow))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout pnlHelpLayout = new javax.swing.GroupLayout(pnlHelp);
         pnlHelp.setLayout(pnlHelpLayout);
         pnlHelpLayout.setHorizontalGroup(
             pnlHelpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 495, Short.MAX_VALUE)
+            .addGap(0, 580, Short.MAX_VALUE)
         );
         pnlHelpLayout.setVerticalGroup(
             pnlHelpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -717,7 +768,7 @@ public class Dashboard extends javax.swing.JFrame {
                         .addComponent(btnRegBooks)
                         .addGap(71, 71, 71)
                         .addComponent(btnHelp)))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(34, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
@@ -913,13 +964,130 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBk2ListActionPerformed
 
     private void btnBk1BorrowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBk1BorrowActionPerformed
-        if(library.insertTransaction(txtBkID1.getText().toString(), txtBkMemID.getText().toString(), txtBk1Borrowed.getText().toString(), null, "Borrow",1) == 1){
+        if(library.insertTransaction(txtBkID1.getText(), txtBkMemID.getText(), txtBk1Borrowed.getText(), null, "Borrow",1) == 1){
             JOptionPane.showMessageDialog(null, "Book borrowed");
+            clear_fileds("Transaction");
         }else{
             JOptionPane.showMessageDialog(null, "Borrow unsuccessful");
+            clear_fileds("Transaction");
         }
     }//GEN-LAST:event_btnBk1BorrowActionPerformed
 
+    private void btnBook1ReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBook1ReturnActionPerformed
+        if(txtBk1Borrowed.getText() != null && !txtBk1Borrowed.getText().equals("")){
+        int fine = calculateFine(txtBk1Borrowed.getText(),txtBk1Returned.getText());
+        String ret_date = txtBk1Returned.getText();
+        if(ret_date==null || ret_date.equals("")){
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
+            LocalDateTime now = LocalDateTime.now();  
+            ret_date = dtf.format(now).toString();
+        }
+        
+        if (fine > 0){
+            int input = JOptionPane.showOptionDialog(null, "You have to pay "+fine, "Fne Payment", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+
+            if(input == JOptionPane.OK_OPTION)
+            {
+                if(library.updateTransaction("Return", ret_date, txtBkID1.getText(), txtBkMemID.getText(),1) == 1){
+                    JOptionPane.showMessageDialog(null, "Book Returned");
+                    clear_fileds("Transaction");
+                }else{
+                    JOptionPane.showMessageDialog(null, "Return unsuccessful");
+                    clear_fileds("Transaction");
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "Return unsuccessful");
+                clear_fileds("Transaction");
+            }
+        }else{
+            if(library.updateTransaction("Return", ret_date, txtBkID1.getText(), txtBkMemID.getText(),1) == 1){
+                JOptionPane.showMessageDialog(null, "Book Returned");
+                clear_fileds("Transaction");
+            }else{
+                JOptionPane.showMessageDialog(null, "Return unsuccessful");
+                clear_fileds("Transaction");
+            }
+        }
+        }else{
+            JOptionPane.showMessageDialog(null, "Borrow the book first");
+            clear_fileds("Transaction");
+        }
+    }//GEN-LAST:event_btnBook1ReturnActionPerformed
+
+    private void btnBk2BorrowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBk2BorrowActionPerformed
+        if(library.insertTransaction(txtBkID2.getText(), txtBkMemID.getText(), txtBk2Borrowed.getText(), null, "Borrow",2) == 1){
+            JOptionPane.showMessageDialog(null, "Book borrowed");
+            clear_fileds("Transaction");
+        }else{
+            JOptionPane.showMessageDialog(null, "Borrow unsuccessful");
+            clear_fileds("Transaction");
+        }
+    }//GEN-LAST:event_btnBk2BorrowActionPerformed
+
+    private void btnBk2ReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBk2ReturnActionPerformed
+        if(txtBk2Borrowed.getText() != null && !txtBk2Borrowed.getText().equals("")){
+        int fine = calculateFine(txtBk2Borrowed.getText(),txtBk2Returned.getText());
+        String ret_date = txtBk1Returned.getText();
+        if(ret_date==null || ret_date.equals("")){
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
+            LocalDateTime now = LocalDateTime.now();  
+            ret_date = dtf.format(now).toString();
+        }
+        
+        if (fine > 0){
+            int input = JOptionPane.showOptionDialog(null, "You have to pay "+fine, "Fne Payment", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+
+            if(input == JOptionPane.OK_OPTION)
+            {
+                if(library.updateTransaction("Return", ret_date, txtBkID2.getText(), txtBkMemID.getText(),1) == 1){
+                    JOptionPane.showMessageDialog(null, "Book Returned");
+                    clear_fileds("Transaction");
+                }else{
+                    JOptionPane.showMessageDialog(null, "Return unsuccessful");
+                    clear_fileds("Transaction");
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "Return unsuccessful");
+                clear_fileds("Transaction");
+            }
+        }else{
+            if(library.updateTransaction("Return", ret_date, txtBkID2.getText(), txtBkMemID.getText(),1) == 1){
+                JOptionPane.showMessageDialog(null, "Book Returned");
+                clear_fileds("Transaction");
+            }else{
+                JOptionPane.showMessageDialog(null, "Return unsuccessful");
+                clear_fileds("Transaction");
+            }
+        }
+        }else{
+            JOptionPane.showMessageDialog(null, "Borrow the book first");
+            clear_fileds("Transaction");
+        }
+    }//GEN-LAST:event_btnBk2ReturnActionPerformed
+
+    private void txtBkMemIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBkMemIDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBkMemIDActionPerformed
+
+    private int calculateFine(String borrowed,String returned){
+        String dayBr[] = borrowed.split("-");
+        int days = 0;
+        if(returned!=null || returned!=""){
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
+            LocalDateTime now = LocalDateTime.now();  
+            System.out.println(dtf.format(now));  
+            returned = dtf.format(now).toString();
+        }
+        String dayRet[] = returned.split("-");
+        days = (((Integer.parseInt(dayRet[0]))-(Integer.parseInt(dayBr[0])))*365)+(((Integer.parseInt(dayRet[1]))-(Integer.parseInt(dayBr[1])))*30)+(((Integer.parseInt(dayRet[2]))-(Integer.parseInt(dayBr[2])))*1);
+        
+        int fine_amount = 0;
+        if(days > 14){
+            fine_amount = days * 5;
+        }
+        return fine_amount;
+    }
+    
     private void activatePanels(int type){
         for(int i = 0;i<panels.length;i++){
             if(type!=i){
@@ -940,7 +1108,7 @@ public class Dashboard extends javax.swing.JFrame {
         return val;
     }
     
-    private void processExtra(String book_id, String mem_id,int step){
+    private void processExtra(String book_id, String mem_id,int step) throws SQLException{
         int key = 0;
         List<String> columns = new ArrayList<>();
         List<String> values = new ArrayList<>();
@@ -953,8 +1121,18 @@ public class Dashboard extends javax.swing.JFrame {
             result = null;
             result = library.searchRecords("books","bk_id",key, columns, values,"");
             ResultsetHolder.setResults(result,"Ops_Bk_"+step);
+            List<String> response = new ArrayList<>();
+            ResultSet rs1 = ResultsetHolder.getResults();
+            if(rs1.next()){
+                int cols = rs1.getMetaData().getColumnCount();
+                System.out.println("IT HAS "+cols+" CoLUMNS");
+                for(int column=0;column<cols;column++){  
+                    System.out.println("Getting col : "+column);
+                    response.add(rs1.getString(column+1));
+                }
+            }
+            ResultsetHolder.setRecord(response);
             setColumns();
-            System.out.println("Column SET");
             
             if(key > 0){
                 result = null;
@@ -967,13 +1145,23 @@ public class Dashboard extends javax.swing.JFrame {
                 values.add(mem_id);
                 result = library.searchRecords("transactions","trns_id",0, columns, values," ORDER BY trns_id DESC");
                 ResultsetHolder.setResults(result,"Trns_"+step);
+                List<String> response_trns = new ArrayList<>();
+                ResultSet rs2 = ResultsetHolder.getResults();
+                if(rs2.next()){
+                    int cols = rs2.getMetaData().getColumnCount();
+                    System.out.println("IT HAS "+cols+" CoLUMNS");
+                    for(int column=0;column<rs2.getMetaData().getColumnCount();column++){          
+                        response_trns.add(rs2.getString(column+1));
+                    }
+                }
+                ResultsetHolder.setRecord(response_trns);
                 setColumns();
             }
         }
     }
     
-    public void setColumns(){
-        List<String> records = ResultsetHolder.getRecord();
+    public void setColumns() throws SQLException{
+        records = ResultsetHolder.getRecord();
         switch(ResultsetHolder.modalType){
             case "Mem":
                 txtMemID.setText(records.get(0));
@@ -995,8 +1183,8 @@ public class Dashboard extends javax.swing.JFrame {
             case "Ops_Mem":
                 txtBkID1.setText(records.get(6));
                 txtBkID2.setText(records.get(7));
-                processExtra(txtBkID1.getText().toString(),txtBkMemID.getText().toString(),1);
-                processExtra(txtBkID2.getText().toString(),txtBkMemID.getText().toString(),2);
+                processExtra(txtBkID1.getText(),txtBkMemID.getText(),1);
+                processExtra(txtBkID2.getText(),txtBkMemID.getText(),2);
                 break;
             case "Ops_Bk_1":
                 txtBkName1.setText(records.get(1));
@@ -1019,6 +1207,24 @@ public class Dashboard extends javax.swing.JFrame {
             case "Book2_List":
                 txtBkID2.setText(records.get(0));
                 txtBkName2.setText(records.get(1));
+                break;
+            default:
+                break;
+        }
+    }
+    
+    private void clear_fileds(String form){
+        switch(form){
+            case "Transaction":
+                txtBkMemID.setText("");
+                txtBk1Returned.setText("");
+                txtBk2Returned.setText("");
+                txtBk2Borrowed.setText("");
+                txtBk1Returned.setText("");
+                txtBkID1.setText("");
+                txtBkID2.setText("");
+                txtBkName1.setText("");
+                txtBkName2.setText("");
                 break;
             default:
                 break;
@@ -1103,10 +1309,14 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
