@@ -188,6 +188,11 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel18.setText("Book 2");
 
         btnBk1Borrow.setText("Borrow");
+        btnBk1Borrow.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBk1BorrowActionPerformed(evt);
+            }
+        });
 
         btnBk1Reserve.setText("Reserve");
 
@@ -907,6 +912,14 @@ public class Dashboard extends javax.swing.JFrame {
         resDialog.setVisible(true);
     }//GEN-LAST:event_btnBk2ListActionPerformed
 
+    private void btnBk1BorrowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBk1BorrowActionPerformed
+        if(library.insertTransaction(txtBkID1.getText().toString(), txtBkMemID.getText().toString(), txtBk1Borrowed.getText().toString(), null, "Borrow",1) == 1){
+            JOptionPane.showMessageDialog(null, "Book borrowed");
+        }else{
+            JOptionPane.showMessageDialog(null, "Borrow unsuccessful");
+        }
+    }//GEN-LAST:event_btnBk1BorrowActionPerformed
+
     private void activatePanels(int type){
         for(int i = 0;i<panels.length;i++){
             if(type!=i){
@@ -937,23 +950,24 @@ public class Dashboard extends javax.swing.JFrame {
         }
         
         if(key!=0){
+            result = null;
             result = library.searchRecords("books","bk_id",key, columns, values,"");
             ResultsetHolder.setResults(result,"Ops_Bk_"+step);
             setColumns();
-            
-            if(book_id!=""){
-                key = tryParse(book_id);
-            }
+            System.out.println("Column SET");
             
             if(key > 0){
+                result = null;
+                System.out.println("In Transaction");
                 columns.clear();
                 values.clear();
                 columns.add("trns_bk_id");
                 columns.add("trns_mem_id");
                 values.add(book_id);
                 values.add(mem_id);
-                result = library.searchRecords("transactions","trns_id",key, columns, values," ORDER BY trns_id DESC");
+                result = library.searchRecords("transactions","trns_id",0, columns, values," ORDER BY trns_id DESC");
                 ResultsetHolder.setResults(result,"Trns_"+step);
+                setColumns();
             }
         }
     }
